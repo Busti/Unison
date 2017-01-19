@@ -1,7 +1,5 @@
-@(message: String)
+@()(implicit messages: Messages)
 
-    @main("Title") {
-        <div class="container">
-        @ui.navbar()
-        </div>
-    }
+@main("Title") {
+    @ui.navbar()
+}

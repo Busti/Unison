@@ -1,14 +1,37 @@
-<nav class="navbar fixed-top navbar-toggleable-md bg-inverse">
+@()(implicit messages: Messages)
+
+@entry(key: String, link: String)(submenu: Html) = {
+    <li class="nav-item">
+        <a class="nav-link" href="@link">@Messages("navbar." + key)</a>
+        @if(submenu.body.nonEmpty) {
+            <!--<div class="dropdown-menu">
+            </div>-->
+            <p>Test</p>
+        }
+    </li>
+}
+
+@dropdown(key: String, link: String) = {
+    <a class="dropdown-item" href="@link">
+    @Messages("navbar." + key)
+    </a>
+}
+
+<nav class="navbar fixed-top navbar-toggleable-md bg-faded">
     <button class="navbar-toggler navbar-toggler-right" type="button"
-    data-toggle="collapse" data-target="#navbarMainContent"
+    data-toggle="collapse" data-target="#navbarMain"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand">Unison</a>
 
-    <div class="collapse navbar-collapse" id="navbarMainContent">
+    <a class="navbar-brand">@Messages("navbar.brand")</a>
+
+    <div class="collapse navbar-collapse" id="navbarMain">
         <ul class="navbar-nav mr-auto">
-
+            @entry("home", "#") {@HtmlFormat.empty}
+            @entry("categories", "#") {
+                @dropdown("test", "#")
+            }
         </ul>
     </div>
 </nav>
