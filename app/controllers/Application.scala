@@ -9,4 +9,11 @@ class Application @Inject()(val messagesApi: MessagesApi) extends Controller wit
   def index = Action {
     Ok(views.html.index())
   }
+
+  def login(username: String, password: String) = Action {
+
+    Ok()
+  }
+
+  def logout = TODO
 }

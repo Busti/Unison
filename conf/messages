@@ -1,4 +1,8 @@
 navbar.brand= Unison
 navbar.home= Home
 navbar.categories= Categories
-navbar.test= Test
+
+input.username= Username
+input.password= Password
+
+button.login= Login

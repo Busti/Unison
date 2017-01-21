@@ -1,37 +1,52 @@
 @()(implicit messages: Messages)
 
 @entry(key: String, link: String)(submenu: Html) = {
-    <li class="nav-item">
-        <a class="nav-link" href="@link">@Messages("navbar." + key)</a>
-        @if(submenu.body.nonEmpty) {
-            <!--<div class="dropdown-menu">
-            </div>-->
-            <p>Test</p>
-        }
+    <li @if(submenu.body.trim.nonEmpty) {
+        class="dropdown"}>
+    @if(submenu.body.trim.nonEmpty) {
+        <a class="dropdown-toggle" href="@link" role="button" data-toggle="dropdown" aria-haspopup="true">
+            @Messages("navbar." + key)
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+        @submenu
+        </ul>
+    } else {
+        <a href="@link">@Messages("navbar." + key)</a>
+    }
     </li>
 }
 
-@dropdown(key: String, link: String) = {
-    <a class="dropdown-item" href="@link">
-    @Messages("navbar." + key)
-    </a>
-}
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+            data-toggle="collapse" data-target="#navbarMain"
+            aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="">@Messages("navbar.brand")</a>
+        </div>
 
-<nav class="navbar fixed-top navbar-toggleable-md bg-faded">
-    <button class="navbar-toggler navbar-toggler-right" type="button"
-    data-toggle="collapse" data-target="#navbarMain"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <a class="navbar-brand">@Messages("navbar.brand")</a>
-
-    <div class="collapse navbar-collapse" id="navbarMain">
-        <ul class="navbar-nav mr-auto">
-            @entry("home", "#") {@HtmlFormat.empty}
-            @entry("categories", "#") {
-                @dropdown("test", "#")
-            }
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="nav navbar-nav">
+                @entry("home", routes.Application.index.toString) {
+                    @HtmlFormat.empty
+                }
+                @entry("categories", routes.Categories.overview.toString) {
+                    @HtmlFormat.empty
+                }
+            </ul>
+            <form class="navbar-form navbar-right" role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="@Messages("input.username")">
+                    <input type="password" class="form-control" placeholder="@Messages("input.password")">
+                    <button type="submit" class="btn btn-success">@Messages("button.login")</button>
+                </div>
+            </form>
+        </div>
     </div>
 </nav>
