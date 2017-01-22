@@ -7,6 +7,8 @@ lazy val `unison` = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
+  "com.typesafe.play" %% "play-slick" % "2.0.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" %  "bootstrap"    % "3.3.4",
   "org.webjars" %  "jquery"       % "3.1.1-1"
