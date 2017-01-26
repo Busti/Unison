@@ -7,13 +7,7 @@ import play.api.mvc._
 
 class Application @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
   def index = Action {
+
     Ok(views.html.index())
   }
-
-  def login(username: String, password: String) = Action {
-
-    Ok()
-  }
-
-  def logout = TODO
 }

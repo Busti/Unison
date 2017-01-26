@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  specs2 % Test
+  specs2 % Test,
+  evolutions
 )
 
 //Database dependencies
