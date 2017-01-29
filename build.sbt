@@ -25,8 +25,8 @@ libraryDependencies ++= Seq(
 
 //Database dependencies
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-slick" % "2.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0",
+  "com.typesafe.play" %% "play-slick" % "2.0.2",
+  "com.typesafe.play" %% "play-slick-evolutions" % "2.0.2",
   "com.h2database" % "h2" % "1.3.176"
 )
 
