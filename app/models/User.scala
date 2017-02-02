@@ -26,6 +26,6 @@ object Users {
   val users = TableQuery[UserTableDef]
 
   def add(user: User): Future[String] = {
-    dbConfig.db.run(users += user).map(res =>)
+    dbConfig.db.run(users += user).map(res =>) test
   }
 }
