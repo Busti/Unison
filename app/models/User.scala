@@ -1,5 +1,7 @@
 package models
 
+import javax.inject.Inject
+
 import play.api.Play
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.H2Driver
@@ -20,7 +22,7 @@ class UserTableDef(tag: Tag) extends Table[User](tag, "user") {
     (id, username, passHash, passSalt) <>(User.tupled, User.unapply)
 }
 
-object Users {
+class Users @Inject() (val dbConfigProvider: DatabaseConfigProvider) {
   val dbConfig = DatabaseConfigProvider.get[H2Driver](Play.current)
 
   val users = TableQuery[UserTableDef]
