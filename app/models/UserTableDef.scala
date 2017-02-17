@@ -1,35 +1,40 @@
 package models
 
+import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.H2Driver
-import slick.lifted.ProvenShape
 
 trait UserTableDef {
   protected val driver: H2Driver
   import driver.api._
 
-  case class User(uuid: String, username: String, email: String, avatarURL: String)
+  case class User(uuid: String, username: String, email: String, avatarURL: Option[String])
 
   class Users(tag: Tag) extends Table[User](tag, "users") {
     def uuid      = column[String]("uuid", O.PrimaryKey)
     def username  = column[String]("username")
     def email     = column[String]("email")
     def avatarURL = column[Option[String]]("avatarURL")
-
-    override def * : ProvenShape[User] =
-      (uuid, username, email, avatarURL) <> (User.tupled, User.unapply)
+    def *         = (uuid, username, email, avatarURL) <> (User.tupled, User.unapply)
   }
 
   case class Password(uuid:String, hasher: String, hash: String, salt: Option[String])
 
-  class Passwords(tag: Tag) extends Table[User](tag, "passwords") {
+  class Passwords(tag: Tag) extends Table[Password](tag, "passwords") {
     def uuid   = column[String]("uuid", O.PrimaryKey)
     def hasher = column[String]("hasher")
     def hash   = column[String]("hash")
     def salt   = column[Option[String]]("salt")
-    override def * : ProvenShape[Password] =
-      (uuid, hasher, hash, salt) <> (Password.tupled, User.unapply)
+    def *      = (uuid, hasher, hash, salt) <> (Password.tupled, Password.unapply)
   }
 
-  val users     = TableQuery[Users]
-  val passwords = TableQuery[Passwords]
+  class LoginInfos(tag: Tag) extends Table[LoginInfo](tag, "logininfos") {
+    def id          = column[Long]("id", O.PrimaryKey, O.AutoInc)
+    def providerID  = column[String]("providerID")
+    def providerKey = column[String]("providerKey")
+    def *           = (id, providerID, providerKey) <> (LoginInfo.tupled, LoginInfo.unapply)
+  }
+
+  val users      = TableQuery[Users]
+  val passwords  = TableQuery[Passwords]
+  val loginInfos = TableQuery[LoginInfos]
 }
