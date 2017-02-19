@@ -1,6 +1,5 @@
 package models
 
-import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.H2Driver
 
 trait UserTableDef {
@@ -27,11 +26,13 @@ trait UserTableDef {
     def *      = (uuid, hasher, hash, salt) <> (Password.tupled, Password.unapply)
   }
 
-  class LoginInfos(tag: Tag) extends Table[LoginInfo](tag, "logininfos") {
+  case class DBLoginInfo(id: Long, providerID: String, providerKey: String)
+
+  class LoginInfos(tag: Tag) extends Table[DBLoginInfo](tag, "logininfos") {
     def id          = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def providerID  = column[String]("providerID")
     def providerKey = column[String]("providerKey")
-    def *           = (id, providerID, providerKey) <> (LoginInfo.tupled, LoginInfo.unapply)
+    def *           = (id, providerID, providerKey) <> (DBLoginInfo.tupled, DBLoginInfo.unapply)
   }
 
   val users      = TableQuery[Users]
