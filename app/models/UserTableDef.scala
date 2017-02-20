@@ -35,7 +35,17 @@ trait UserTableDef {
     def *           = (id, providerID, providerKey) <> (DBLoginInfo.tupled, DBLoginInfo.unapply)
   }
 
-  val users      = TableQuery[Users]
-  val passwords  = TableQuery[Passwords]
-  val loginInfos = TableQuery[LoginInfos]
+  //Many to Many relation between Users and LoginInfo
+  case class UserLoginInfo(userId: String, loginInfoId: Long)
+
+  class UserLoginInfos(tag: Tag) extends Table[UserLoginInfo](tag, "userlogininfos") {
+    def userId      = column[String]("userId")
+    def loginInfoId = column[Long]("loginInfoId")
+    def *           = (userId, loginInfoId) <> (UserLoginInfo.tupled, UserLoginInfo.unapply)
+  }
+
+  val users          = TableQuery[Users]
+  val passwords      = TableQuery[Passwords]
+  val loginInfos     = TableQuery[LoginInfos]
+  val userLoginInfos = TableQuery[UserLoginInfos]
 }

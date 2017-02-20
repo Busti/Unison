@@ -11,8 +11,17 @@ class UserDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   def loginInfoQuery(loginInfo: LoginInfo) =
     loginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)
 
-
   def find(loginInfo: LoginInfo) = {
+    val query = for {
+      queryLoginInfo <- loginInfoQuery(loginInfo)
+      queryUserLoginInfo <- userLoginInfos.filter(_.loginInfoId === queryLoginInfo.id)
+      queryUser <- users.filter(_.uuid === queryUserLoginInfo.userId)
+    } yield queryUser
 
+    db.run(query.result.headOption).map { dbUserOption =>
+      dbUserOption.map { user =>
+        return user
+      }
+    }
   }
 }
