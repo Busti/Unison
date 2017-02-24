@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test,
-  evolutions
+  evolutions,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
 //Database dependencies
@@ -30,6 +31,7 @@ libraryDependencies ++= Seq(
   "com.h2database"    %  "h2"                    % "1.3.176"
 )
 
+//Security Dependencies
 libraryDependencies ++= Seq(
   "com.mohiva" %% "play-silhouette"                 % "4.0.0",
   "com.mohiva" %% "play-silhouette-password-bcrypt" % "4.0.0",

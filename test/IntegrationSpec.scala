@@ -1,22 +1,14 @@
-import org.junit.runner._
-import org.specs2.mutable._
-import org.specs2.runner._
-import play.test.WithBrowser
+import org.scalatestplus.play._
 
 /**
- * add your integration spec here.
- * An integration test will fire up a whole play application in a real (or headless) browser
- */
-@RunWith(classOf[JUnitRunner])
-class IntegrationSpec extends Specification {
+  * Add your integration spec here.
+  * An integration test will fire up a whole play application in a real (or headless) browser.
+  */
+class IntegrationSpec extends PlaySpec with OneServerPerTest with OneBrowserPerTest with HtmlUnitFactory {
 
   "Application" should {
-
-    "work from within a browser" in new WithBrowser {
-
-      browser.goTo("http://localhost:" + port)
-
-      browser.pageSource must contain("Your new application is ready.")
+    "work from within a browser" in {
+      go to ("http://localhost:" + port)
     }
   }
 }
