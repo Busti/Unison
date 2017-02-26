@@ -1,5 +1,7 @@
 package models
 
+import java.util.UUID
+
 import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.LoginInfo
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
@@ -14,7 +16,7 @@ class UserDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
   def loginInfoQuery(loginInfo: LoginInfo) =
     loginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)
 
-  def find(loginInfo: LoginInfo): Future[Option[User]] = {
+  def find(loginInfo: LoginInfo): Future[Option[DBUser]] = {
     val query = for {
       queryLoginInfo <- loginInfoQuery(loginInfo)
       queryUserLoginInfo <- userLoginInfos.filter(_.loginInfoId === queryLoginInfo.id)
@@ -25,6 +27,13 @@ class UserDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
       dbUserOption.map { user =>
         user
       }
+    }
+  }
+
+  def find(id: UUID) {
+    val query = for {
+      user <- users.filter(_.uuid === id.toString)
+
     }
   }
 }
