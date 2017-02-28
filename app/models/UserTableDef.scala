@@ -8,7 +8,7 @@ trait UserTableDef {
   protected val driver: H2Driver
   import driver.api._
 
-  case class DBUser(uuid: String, username: String, email: String, avatarURL: Option[String])
+  case class DBUser(uuid: UUID, username: String, email: String, avatarURL: Option[String])
 
   class Users(tag: Tag) extends Table[DBUser](tag, "users") {
     def uuid      = column[UUID]("uuid", O.PrimaryKey)
@@ -18,7 +18,7 @@ trait UserTableDef {
     def *         = (uuid, username, email, avatarURL) <> (DBUser.tupled, DBUser.unapply)
   }
 
-  case class DBPassword(uuid:String, hasher: String, hash: String, salt: Option[String])
+  case class DBPassword(uuid:UUID, hasher: String, hash: String, salt: Option[String])
 
   class Passwords(tag: Tag) extends Table[DBPassword](tag, "passwords") {
     def uuid   = column[UUID]("uuid", O.PrimaryKey)
@@ -41,7 +41,7 @@ trait UserTableDef {
   case class DBUserLoginInfo(userId: String, loginInfoId: Long)
 
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, "userlogininfos") {
-    def userId      = column[String]("userId")
+    def userId      = column[UUID]("userId")
     def loginInfoId = column[Long]("loginInfoId")
     def *           = (userId, loginInfoId) <> (DBUserLoginInfo.tupled, DBUserLoginInfo.unapply)
   }
