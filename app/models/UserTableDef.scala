@@ -1,8 +1,8 @@
 package models
 
 import java.util.UUID
-
 import slick.driver.H2Driver
+import slick.lifted.ProvenShape.proveShapeOf
 
 trait UserTableDef {
   protected val driver: H2Driver
@@ -28,17 +28,17 @@ trait UserTableDef {
     def *      = (uuid, hasher, hash, salt) <> (DBPassword.tupled, DBPassword.unapply)
   }
 
-  case class DBLoginInfo(id: Long, providerID: String, providerKey: String)
+  case class DBLoginInfo(id: Option[Long], providerID: String, providerKey: String)
 
   class LoginInfos(tag: Tag) extends Table[DBLoginInfo](tag, "logininfos") {
     def id          = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def providerID  = column[String]("providerID")
     def providerKey = column[String]("providerKey")
-    def *           = (id, providerID, providerKey) <> (DBLoginInfo.tupled, DBLoginInfo.unapply)
+    def *           = (id.?, providerID, providerKey) <> (DBLoginInfo.tupled, DBLoginInfo.unapply)
   }
 
   //Many to Many relation between Users and LoginInfo
-  case class DBUserLoginInfo(userId: String, loginInfoId: Long)
+  case class DBUserLoginInfo(userId: UUID, loginInfoId: Long)
 
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, "userlogininfos") {
     def userId      = column[UUID]("userId")
