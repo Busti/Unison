@@ -1,5 +1,5 @@
-@()(implicit messages: Messages)
+@(webJarAssets: WebJarAssets)(implicit messages: Messages)
 
-@main("Title") {
+@main(webJarAssets, "Title") {
     @ui.navbar()
 }

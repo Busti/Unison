@@ -6,3 +6,5 @@ input.username= Username
 input.password= Password
 
 button.login= Login
+
+auth.signUp= Sign Up
