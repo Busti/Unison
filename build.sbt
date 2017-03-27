@@ -16,7 +16,6 @@ resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
 //Playframework default dependencies
 libraryDependencies ++= Seq(
-  jdbc,
   cache,
   ws,
   specs2 % Test,
@@ -42,7 +41,6 @@ libraryDependencies ++= Seq(
 
 //Webjars
 libraryDependencies ++= Seq(
-  "org.webjars" %% "webjars-play" % "2.5.0",
-  "org.webjars" %  "bootstrap"    % "3.3.4",
-  "org.webjars" %  "jquery"       % "3.1.1-1"
+  "org.webjars"       %% "webjars-play"   % "2.5.0",
+  "org.webjars.bower" %  "bootstrap-sass" % "latest.integration"
 )
