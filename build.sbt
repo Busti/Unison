@@ -10,9 +10,7 @@ unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/te
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
-/***************
-* Dependencies *
-***************/
+TwirlKeys.constructorAnnotations += "@javax.inject.Inject()"
 
 //Playframework default dependencies
 libraryDependencies ++= Seq(
@@ -42,5 +40,5 @@ libraryDependencies ++= Seq(
 //Webjars
 libraryDependencies ++= Seq(
   "org.webjars"       %% "webjars-play"   % "2.5.0",
-  "org.webjars.bower" %  "bootstrap-sass" % "latest.integration"
+  "org.webjars.bower" %  "bootstrap-sass" % "3.3.7"
 )
