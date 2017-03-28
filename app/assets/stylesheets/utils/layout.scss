@@ -1,4 +1,7 @@
-.navbar-collapse:last-child {
+//noinspection CssUnknownTarget
+@import "lib/bootstrap-sass/assets/stylesheets/bootstrap";
+
+@media (min-width: 768px) {
   .navbar-right {
     margin-right: 0;
     margin-left: 0;

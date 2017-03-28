@@ -3,14 +3,14 @@ version := "1.0"
 
 lazy val `unison` = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
-TwirlKeys.constructorAnnotations += "@javax.inject.Inject()"
+//TwirlKeys.constructorAnnotations += "@javax.inject.Inject()"
 
 //Playframework default dependencies
 libraryDependencies ++= Seq(
