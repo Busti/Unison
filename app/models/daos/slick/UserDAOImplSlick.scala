@@ -1,28 +1,23 @@
-package models
+package models.daos.slick
 
 import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
+import models.User
+import models.daos.UserDAO
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import slick.dbio.DBIOAction
 import slick.driver.H2Driver
 
-
-class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends UserTableDef with HasDatabaseConfigProvider[H2Driver] {
+class UserDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
+  extends UserDAO with UserTableDefSlick with HasDatabaseConfigProvider[H2Driver] {
 
   import driver.api._
 
   def loginInfoQuery(loginInfo: LoginInfo) =
     loginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)
 
-  /**
-    * Find a user by it's login info.
-    *
-    * @param loginInfo The Login Info of the User.
-    * @return A Future Option populated with the user if found.
-    */
   def find(loginInfo: LoginInfo) = {
     /* Comprehension that creates a query doing the following
      */
@@ -35,17 +30,11 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     //Executes the query and stores the resulting DBUser and the initial LoginInfo into a User
     db.run(query.result.headOption).map { dbUserOption =>
       dbUserOption.map { user =>
-        new User(loginInfo, user.uuid, user.username, user.email, user.avatarURL)
+        User(user.uuid, loginInfo, user.username, user.email, user.avatarURL, user.activated)
       }
     }
   }
 
-  /**
-    * Find a user by its id.
-    *
-    * @param id The UUID of the desired User.
-    * @return A Future Option populated with the user if found.
-    */
   def find(id: UUID) = {
     val query = for {
       queryUser <- users.filter(_.uuid === id)
@@ -56,16 +45,17 @@ class UserDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(query.result.headOption).map { resultOption =>
       resultOption.map {
         case (user, loginInfo) =>
-          new User(
+          User(
+            user.uuid,
             LoginInfo(loginInfo.providerID, loginInfo.providerKey),
-            user.uuid, user.username, user.email, user.avatarURL
+            user.username, user.email, user.avatarURL, user.activated
           )
       }
     }
   }
 
   def save(user: User) = {
-    val dbUser = DBUser(user.uuid, user.username, user.email, user.avatarURL)
+    val dbUser = DBUser(user.uuid, user.username, user.email, user.avatarURL, user.activated)
     val dBLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
 
     val loginInfoAction = {

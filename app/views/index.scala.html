@@ -1,5 +1,5 @@
-@(webJarAssets: WebJarAssets)(implicit messages: Messages)
+@(webJarAssets: WebJarAssets)(implicit loggedUser: Option[User], messages: Messages)
 
 @main(webJarAssets, "Title") {
-    @ui.navbar()
+
 }

@@ -2,9 +2,16 @@ navbar.brand= Unison
 navbar.home= Home
 navbar.categories= Categories
 
-input.username= Username
-input.password= Password
-
-button.login= Login
-
+auth.login= Login
 auth.signUp= Sign Up
+
+account.username= Username
+account.username.placeholder= Enter your desired Username...
+account.password= Password
+account.password.placeholder= Enter your password...
+account.password_repeat= Confirm Password
+account.password_repeat.placeholder= Type your password again...
+account.email= e-mail
+account.email.placeholder= Enter your e-mail address...
+account.first_name= First Name
+account.last_name= Last Name

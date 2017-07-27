@@ -1,3 +1,4 @@
+
 name := "Unison"
 version := "1.0"
 
@@ -7,8 +8,10 @@ scalaVersion := "2.11.8"
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
-resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
+resolvers ++= Seq(
+  "Scalaz Bintray Repo"    at "https://dl.bintray.com/scalaz/releases",
+  "Atlassian Releases"     at "https://maven.atlassian.com/public/"
+)
 
 //TwirlKeys.constructorAnnotations += "@javax.inject.Inject()"
 
@@ -21,11 +24,17 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )
 
+//Miscellaneous dependencies
+libraryDependencies ++= Seq(
+  "net.codingwell" %% "scala-guice" % "4.1.0",
+  "com.iheart"     %% "ficus"       % "1.4.1"
+)
+
 //Database dependencies
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick"            % "2.0.2",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.2",
-  "com.h2database"    %  "h2"                    % "1.3.176"
+  "com.h2database"    % "h2"                     % "1.3.176"
 )
 
 //Security Dependencies
@@ -39,6 +48,6 @@ libraryDependencies ++= Seq(
 
 //Webjars
 libraryDependencies ++= Seq(
-  "org.webjars"       %% "webjars-play"   % "2.5.0",
-  "org.webjars.bower" %  "bootstrap-sass" % "3.3.7"
+  "org.webjars"       %% "webjars-play"  % "2.5.0",
+  "org.webjars.bower" % "bootstrap-sass" % "3.3.7"
 )

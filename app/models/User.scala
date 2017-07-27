@@ -13,11 +13,13 @@ import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
   *                  This should be unique amongst all users but can be changed at any time.
   * @param email     The email of the authenticated provider.
   * @param avatarURL Maybe the avatar URL of the authenticated provider.
+  * @param activated Whether the user has activated their account using their E-Mail Address or not.
   */
 case class User(
-            loginInfo: LoginInfo,
-            uuid: UUID,
-            username: String,
-            email: String,
-            avatarURL: Option[String]
-          ) extends Identity
+  uuid: UUID,
+  loginInfo: LoginInfo,
+  username: String,
+  email: String,
+  avatarURL: Option[String],
+  activated: Boolean
+) extends Identity
