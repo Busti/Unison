@@ -3,13 +3,15 @@ package modules
 import javax.inject.Named
 
 import com.google.inject.{AbstractModule, Provides}
-import com.mohiva.play.silhouette.api.crypto.{CookieSigner, Crypter, CrypterAuthenticatorEncoder}
-import com.mohiva.play.silhouette.api.services.AuthenticatorService
-import com.mohiva.play.silhouette.api.util.{Clock, FingerprintGenerator, IDGenerator}
+import com.mohiva.play.silhouette.api.crypto.{CookieSigner, Crypter, CrypterAuthenticatorEncoder, Signer}
+import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
+import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.crypto.{JcaCookieSigner, JcaCookieSignerSettings, JcaCrypter, JcaCrypterSettings}
+import com.mohiva.play.silhouette.crypto._
 import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticatorService, CookieAuthenticatorSettings}
+import com.mohiva.play.silhouette.impl.services.GravatarService
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
+import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import models.daos.UserDAO
 import models.daos.slick.UserDAOImplSlick
 import models.services.UserServiceImplSlick
@@ -18,26 +20,33 @@ import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
-import utils.silhouette.{EnvCookie, UserService}
+import play.api.libs.ws.WSClient
+import play.api.mvc.CookieHeaderEncoding
+import utils.silhouette.{EnvDefault, UserService}
 
 
 class ModuleSilhouette extends AbstractModule with ScalaModule {
   override def configure() {
-    bind[Silhouette[EnvCookie]].to[SilhouetteProvider[EnvCookie]]
+    bind[Silhouette[EnvDefault]].to[SilhouetteProvider[EnvDefault]]
     bind[UserService].to[UserServiceImplSlick]
     bind[UserDAO].to[UserDAOImplSlick]
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
-    bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator())
+    bind[PasswordHasher].toInstance(new BCryptPasswordHasher())
+    bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
+    bind[EventBus].toInstance(EventBus())
     bind[Clock].toInstance(Clock())
   }
 
   @Provides
+  def provideHttpLayer(client: WSClient): HTTPLayer = new PlayHTTPLayer(client)
+
+  @Provides
   def provideEnvironment(
     userService: UserService,
-    authenticatorService: AuthenticatorService[EnvCookie#A],
+    authenticatorService: AuthenticatorService[EnvDefault#A],
     eventBus: EventBus
-  ): Environment[EnvCookie] = {
-    Environment[EnvCookie](
+  ): Environment[EnvDefault] = {
+    Environment[EnvDefault](
       userService,
       authenticatorService,
       Seq(),
@@ -46,10 +55,10 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  @Named("authenticator-cookie-signer")
-  def providesAuthenticatorCookieSigner(configuration: Configuration): CookieSigner = {
-    val config = configuration.underlying.as[JcaCookieSignerSettings]("silhouette.authenticator.cookie.signer")
-    new JcaCookieSigner(config)
+  @Named("authenticator-signer")
+  def providesAuthenticatorCookieSigner(configuration: Configuration): Signer = {
+    val config = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.cookie.signer")
+    new JcaSigner(config)
   }
 
   @Provides
@@ -62,16 +71,20 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
 
   @Provides
   def provideAuthenticatorService(
-    @Named("authenticator-cookie-signer") cookieSigner: CookieSigner,
+    @Named("authenticator-signer") signer: Signer,
     @Named("authenticator-crypter") crypter: Crypter,
+    cookieHeaderEncoding: CookieHeaderEncoding,
     fingerprintGenerator: FingerprintGenerator,
     idGenerator: IDGenerator,
     configuration: Configuration,
     clock: Clock
-  ): AuthenticatorService[EnvCookie#A] = {
+  ): AuthenticatorService[EnvDefault#A] = {
     val config = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
     val encoder = new CrypterAuthenticatorEncoder(crypter)
 
-    new CookieAuthenticatorService(config, None, cookieSigner, encoder, fingerprintGenerator, idGenerator, clock)
+    new CookieAuthenticatorService(config, None, signer, cookieHeaderEncoding, encoder, fingerprintGenerator, idGenerator, clock)
   }
+
+  @Provides
+  def provideAvatarService(httpLayer: HTTPLayer): AvatarService = new GravatarService(httpLayer)
 }

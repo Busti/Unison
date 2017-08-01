@@ -1,21 +1,22 @@
 package models.daos.slick
 
+import java.sql.Timestamp
 import java.util.UUID
 
-import org.joda.time.DateTime
-import slick.driver.H2Driver
+import slick.jdbc.H2Profile
+import slick.lifted.ProvenShape.proveShapeOf
 
 trait AuthTokenTableDefSlick {
-  protected val driver: H2Driver
-  import driver.api._
+  protected val profile: H2Profile
+  import profile.api._
 
-  case class DBAuthToken(id: UUID, userId: UUID, expiry: DateTime)
+  case class DBAuthToken(uuid: UUID, userId: UUID, expiry: Timestamp)
 
   class AuthTokens(tag: Tag) extends Table[DBAuthToken](tag, "AuthTokens") {
     def uuid   = column[UUID]("uuid", O.PrimaryKey)
     def userId = column[UUID]("userId")
-    def expiry = column[DateTime]("expiry")
-    def * = (uuid, userId, expiry) <> (DBAuthToken.tupled, DBAuthToken.unapply)
+    def expiry = column[Timestamp]("expiry")
+    def *      = (uuid, userId, expiry) <> (DBAuthToken.tupled, DBAuthToken.unapply)
   }
 
   val authTokens = TableQuery[AuthTokens]

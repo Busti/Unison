@@ -35,9 +35,9 @@ class UserDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigP
     }
   }
 
-  def find(id: UUID) = {
+  def find(uuid: UUID) = {
     val query = for {
-      queryUser <- users.filter(_.uuid === id)
+      queryUser <- users.filter(_.uuid === uuid)
       queryUserLoginInfo <- userLoginInfos.filter(_.userId === queryUser.uuid)
       queryLoginInfo <- loginInfos.filter(_.id === queryUserLoginInfo.loginInfoId)
     } yield (queryUser, queryLoginInfo)

@@ -2,14 +2,14 @@ package models.daos.slick
 
 import java.util.UUID
 
-import slick.driver.H2Driver
+import slick.jdbc.H2Profile
 import slick.lifted.ProvenShape.proveShapeOf
 
 trait UserTableDefSlick {
   //Todo: 26.07.2017 Use Postgres in production.
   //Todo: 26.07.2017 Make the driver easily interchangeable?
-  protected val driver: H2Driver
-  import driver.api._
+  protected val profile: H2Profile
+  import profile.api._
 
   case class DBUser(uuid: UUID, username: String, email: String, avatarURL: Option[String], activated: Boolean)
 

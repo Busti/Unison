@@ -1,30 +1,24 @@
 package controllers.auth
 
-import java.util.UUID
 import javax.inject.Inject
 
+import com.mohiva.play.silhouette.api.Silhouette
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
-import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import controllers.routes
-import forms.FormSignUp
-import models.User
 import models.services.UserService
 import play.api.i18n.MessagesApi
-import utils.silhouette.EnvCookie
-
-import scala.concurrent.Future
+import utils.silhouette.EnvDefault
 
 class ControllerSignUp @Inject()(
+  silhouetteInst: Silhouette[EnvDefault],
   userService: UserService,
   passwordHasherRegistry: PasswordHasherRegistry,
   avatarService: AvatarService,
   authInfoRepository: AuthInfoRepository
 ) extends ControllerAuth {
 
-  def submit = silhouette.UnsecuredAction.async { implicit request =>
+  /*def submit = silhouette.UnsecuredAction.async { implicit request:Request[AnyContent] =>
     //Check the retrieved form
     FormSignUp.form.bindFromRequest.fold(
       form => Future.successful(Redirect(routes.ControllerApplication.index)),
@@ -65,8 +59,8 @@ class ControllerSignUp @Inject()(
         }
       }
     )
-  }
+  }*/
 
-  override def silhouette: Silhouette[EnvCookie] = ???
+  override def silhouette: Silhouette[EnvDefault] = ???
   override def messagesApi: MessagesApi = ???
 }

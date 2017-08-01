@@ -1,4 +1,6 @@
-@(webJarAssets: WebJarAssets)(implicit loggedUser: Option[User], messages: Messages)
+@import org.webjars.play.WebJarsUtil
+
+@(implicit loggedUser: Option[User], messages: Messages, webJarsUtil: WebJarsUtil)
 
 @main(webJarAssets, "Title") {
 

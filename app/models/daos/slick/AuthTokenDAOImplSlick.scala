@@ -14,11 +14,15 @@ import scala.concurrent.Future
 class AuthTokenDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends AuthTokenDAO with AuthTokenTableDefSlick with HasDatabaseConfigProvider[H2Driver] {
 
-  override def find(uuid: UUID): Future[Option[AuthToken]] = ???
+  def find(uuid: UUID) = {
+    val query = authTokens.filter(_.uuid == uuid).pack
 
-  override def findExpired(dateTime: DateTime): Future[Seq[AuthToken]] = ???
-  
-  override def save(token: AuthToken): Future[AuthToken] = ???
 
-  override def remove(uuid: UUID): Future[Unit] = ???
+  }
+
+  def findExpired(dateTime: DateTime): Future[Seq[AuthToken]] = ???
+
+  def save(token: AuthToken): Future[AuthToken] = ???
+
+  def remove(uuid: UUID): Future[Unit] = ???
 }
