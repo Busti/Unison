@@ -2,9 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Controller
+import play.api.mvc.{AbstractController, ControllerComponents}
 
-class ControllerCategories @Inject()(val messagesApi: MessagesApi) extends Controller with I18nSupport {
+class ControllerCategories @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   def overview = TODO
 }

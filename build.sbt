@@ -3,7 +3,7 @@ version := "1.0"
 
 lazy val `unison` = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.12.3"
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
@@ -31,18 +31,18 @@ libraryDependencies ++= Seq(
 
 //Database dependencies
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-slick"            % "3.0.0-M5",
-  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.0-M5",
-  "com.h2database"    %  "h2"                    % "1.3.176"
+  "com.typesafe.play" %% "play-slick"            % "3.0.2",
+  "com.typesafe.play" %% "play-slick-evolutions" % "3.0.2",
+  "com.h2database"    %  "h2"                    % "1.4.196"
 )
 
 //Security Dependencies
 libraryDependencies ++= Seq(
-  "com.mohiva" %% "play-silhouette"                 % "5.0.0-RC2",
-  "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.0-RC2",
-  "com.mohiva" %% "play-silhouette-crypto-jca"      % "5.0.0-RC2",
-  "com.mohiva" %% "play-silhouette-persistence"     % "5.0.0-RC2",
-  "com.mohiva" %% "play-silhouette-testkit"         % "5.0.0-RC2" % "test"
+  "com.mohiva" %% "play-silhouette"                 % "5.0.0",
+  "com.mohiva" %% "play-silhouette-password-bcrypt" % "5.0.0",
+  "com.mohiva" %% "play-silhouette-crypto-jca"      % "5.0.0",
+  "com.mohiva" %% "play-silhouette-persistence"     % "5.0.0",
+  "com.mohiva" %% "play-silhouette-testkit"         % "5.0.0" % "test"
 )
 
 //Webjars

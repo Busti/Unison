@@ -1,4 +1,6 @@
-@(webJarAssets: WebJarAssets, title: String)(content: Html)(implicit messages: Messages)
+@import org.webjars.play.WebJarsUtil
+
+@(title: String)(content: Html)(implicit messages: Messages, webJarAssets: WebJarsUtil)
 
 <!DOCTYPE html>
 
