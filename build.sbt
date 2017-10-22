@@ -5,7 +5,7 @@ lazy val `unison` = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.3"
 
-unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
+unmanagedResourceDirectories in Test += baseDirectory.value / "target/web/public/test"
 
 resolvers ++= Seq(
   "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases",
@@ -26,6 +26,7 @@ libraryDependencies ++= Seq(
 //Miscellaneous dependencies
 libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.1.0",
+  //guice,
   "com.iheart"     %% "ficus"       % "1.4.1"
 )
 
@@ -47,6 +48,6 @@ libraryDependencies ++= Seq(
 
 //Webjars
 libraryDependencies ++= Seq(
-  "org.webjars"       %% "webjars-play"  % "2.6.0",
+  "org.webjars"       %% "webjars-play"  % "2.6.1",
   "org.webjars.bower" % "bootstrap-sass" % "3.3.7"
 )
