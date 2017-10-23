@@ -20,13 +20,13 @@ libraryDependencies ++= Seq(
   ws,
   specs2 % Test,
   evolutions,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.0.0" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
 )
 
 //Miscellaneous dependencies
 libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.1.0",
-  //guice,
+  guice,
   "com.iheart"     %% "ficus"       % "1.4.1"
 )
 
