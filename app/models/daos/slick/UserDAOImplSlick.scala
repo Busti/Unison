@@ -8,12 +8,12 @@ import models.User
 import models.daos.UserDAO
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import slick.driver.H2Driver
+import slick.jdbc.H2Profile
 
 class UserDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends UserDAO with UserTableDefSlick with HasDatabaseConfigProvider[H2Driver] {
+  extends UserDAO with UserTableDefSlick with HasDatabaseConfigProvider[H2Profile] {
 
-  import driver.api._
+  import profile.api._
 
   def loginInfoQuery(loginInfo: LoginInfo) =
     loginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)

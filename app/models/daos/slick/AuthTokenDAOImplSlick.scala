@@ -7,15 +7,17 @@ import models.AuthToken
 import models.daos.AuthTokenDAO
 import org.joda.time.DateTime
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.driver.H2Driver
+import slick.jdbc.H2Profile
 
 import scala.concurrent.Future
 
 class AuthTokenDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends AuthTokenDAO with AuthTokenTableDefSlick with HasDatabaseConfigProvider[H2Driver] {
+  extends AuthTokenDAO with AuthTokenTableDefSlick with HasDatabaseConfigProvider[H2Profile] {
+
+  import profile.api._
 
   def find(uuid: UUID) = {
-    val query = authTokens.filter(_.uuid == uuid).pack
+    val query = authTokens.filter(_.uuid === uuid).pack
 
 
   }
