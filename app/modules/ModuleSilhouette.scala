@@ -3,7 +3,7 @@ package modules
 import javax.inject.Named
 
 import com.google.inject.{AbstractModule, Provides}
-import com.mohiva.play.silhouette.api.crypto.{CookieSigner, Crypter, CrypterAuthenticatorEncoder, Signer}
+import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
 import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
@@ -14,6 +14,7 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import models.daos.UserDAO
 import models.daos.slick.UserDAOImplSlick
+import models.services.UserService
 import models.services.UserServiceImplSlick
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
@@ -22,8 +23,7 @@ import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import play.api.mvc.CookieHeaderEncoding
-import utils.silhouette.{EnvDefault, UserService}
-
+import utils.silhouette.EnvDefault
 
 class ModuleSilhouette extends AbstractModule with ScalaModule {
   override def configure() {

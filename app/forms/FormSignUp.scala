@@ -8,16 +8,18 @@ object FormSignUp {
     mapping(
       "username" -> nonEmptyText(minLength = 4, maxLength = 64),
       "email" -> nonEmptyText,
-      "password" -> nonEmptyText(minLength = 8),
-      "confirm" -> nonEmptyText(minLength = 8)
+      "password" -> nonEmptyText(minLength = 20),
+      "confirm" -> nonEmptyText(minLength = 20)
     )(Data.apply)(Data.unapply)
   )
 
   /**
-    * The forms data object.
+    * The forms data case class.
     *
     * @param username The unique username or email used for the login.
-    * @param password
+    * @param email    The mail address used to contact the user.
+    * @param password The password used to login to the account.
+    * @param confirm  The password repeated to circumvent user errors.
     */
   case class Data(
     username: String,

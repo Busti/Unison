@@ -1,66 +1,44 @@
 package controllers.auth
 
+import java.util.UUID
 import javax.inject.Inject
 
-import com.mohiva.play.silhouette.api.Silhouette
+import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
-import models.services.UserService
-import play.api.i18n.MessagesApi
+import com.mohiva.play.silhouette.impl.providers._
+import controllers.AssetsFinder
+import models.services.{AuthTokenService, UserService}
+import org.webjars.play.{WebJarsUtil, routes}
+import play.api.i18n.{I18nSupport, Messages}
+import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import utils.silhouette.EnvDefault
 
-class ControllerSignUp @Inject()(
-  silhouetteInst: Silhouette[EnvDefault],
+import scala.concurrent.{ExecutionContext, Future}
+
+class ControllerSignUp @Inject()
+(
+  components: ControllerComponents,
+  silhouette: Silhouette[EnvDefault],
   userService: UserService,
-  passwordHasherRegistry: PasswordHasherRegistry,
+  authInfoRepository: AuthInfoRepository,
+  authTokenService: AuthTokenService,
   avatarService: AvatarService,
-  authInfoRepository: AuthInfoRepository
-) extends ControllerAuth {
+  passwordHasherRegistry: PasswordHasherRegistry,
+)(
+  implicit
+  webJarsUtil: WebJarsUtil,
+  assets: AssetsFinder,
+  ex: ExecutionContext
+) extends AbstractController(components) with I18nSupport {
 
-  /*def submit = silhouette.UnsecuredAction.async { implicit request:Request[AnyContent] =>
-    //Check the retrieved form
-    FormSignUp.form.bindFromRequest.fold(
-      form => Future.successful(Redirect(routes.ControllerApplication.index)),
-      data => {
-        val result = Redirect(routes.ControllerApplication.index)
-        val loginInfo = LoginInfo(CredentialsProvider.ID, data.username)
-        //Try to find a user matching the retrieved data
-        userService.retrieve(loginInfo).flatMap {
-          case Some(user) =>
-            /*
-             * Send an email to the existing user and redirect to a success page.
-             * The messages shown to the user attempting to create the account has to be the same as if a new account
-             * had been created, for security reasons.
-             */
-            //Todo: Send Mail
-            Future.successful(result)
-          case None =>
-            //Generate a new account
-            val authInfo = passwordHasherRegistry.current.hash(data.password)
-            //Create a new User object and fill it with the retrieved data.
-            val user = User(
-              uuid = UUID.randomUUID(),
-              loginInfo = loginInfo,
-              username = data.username,
-              email = data.email,
-              avatarURL = None,
-              activated = false
-            )
-            for {
-              avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.save(user.copy(avatarURL = avatar))
-              authInfo <- authInfoRepository.add(loginInfo, authInfo)
-              authToken <-
-            } yield {
-              ???
-            }
-            ???
-        }
-      }
-    )
-  }*/
-
-  override def silhouette: Silhouette[EnvDefault] = ???
-  override def messagesApi: MessagesApi = ???
+  /**
+    * Handles the submitted form.
+    *
+    * @return The result to display.
+    */
+  def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+    ???
+  }
 }
