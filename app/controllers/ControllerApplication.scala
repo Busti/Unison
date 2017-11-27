@@ -8,7 +8,7 @@ import play.api.mvc._
 class ControllerApplication @Inject()(
   cc: ControllerComponents,
   override implicit val messagesApi: MessagesApi)
-  extends AbstractController(cc) with I18nSupport {
+  extends InjectedController with I18nSupport {
 
   def index = Action {
       Ok("Test")//()views.html.index

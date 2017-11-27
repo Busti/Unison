@@ -7,7 +7,6 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import models.User
 import models.daos.UserDAO
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.jdbc.H2Profile
 
 class UserDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)

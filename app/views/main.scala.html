@@ -1,6 +1,6 @@
 @import org.webjars.play.WebJarsUtil
 
-@(title: String)(content: Html)(implicit messages: Messages, webJarAssets: WebJarsUtil)
+@(title: String)(content: Html)(implicit messages: Messages, webJarsUtil: WebJarsUtil)
 
 <!DOCTYPE html>
 
@@ -11,8 +11,8 @@
 
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
 
-        <script src="@routes.WebJarAssets.at(webJarAssets.locate("jquery.min.js"))" type="text/javascript"></script>
-        <script src="@routes.WebJarAssets.at(webJarAssets.locate("bootstrap.min.js"))" type="text/javascript"></script>
+        <script src="@webJarsUtil.script("jquery.min.js")" type="text/javascript"></script>
+        <script src="@webJarsUtil.script("bootstrap.min.js")" type="text/javascript"></script>
     </head>
     <body>
         @ui.navbar()

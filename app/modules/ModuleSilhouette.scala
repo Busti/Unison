@@ -27,14 +27,16 @@ import utils.silhouette.EnvDefault
 
 class ModuleSilhouette extends AbstractModule with ScalaModule {
   override def configure() {
+    // @formatter:off
     bind[Silhouette[EnvDefault]].to[SilhouetteProvider[EnvDefault]]
-    bind[UserService].to[UserServiceImplSlick]
-    bind[UserDAO].to[UserDAOImplSlick]
-    bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
-    bind[PasswordHasher].toInstance(new BCryptPasswordHasher())
-    bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
-    bind[EventBus].toInstance(EventBus())
-    bind[Clock].toInstance(Clock())
+    bind[UserService]           .to[UserServiceImplSlick]
+    bind[UserDAO]               .to[UserDAOImplSlick]
+    bind[IDGenerator]           .toInstance(new SecureRandomIDGenerator())
+    bind[PasswordHasher]        .toInstance(new BCryptPasswordHasher())
+    bind[FingerprintGenerator]  .toInstance(new DefaultFingerprintGenerator(false))
+    bind[EventBus]              .toInstance(EventBus())
+    bind[Clock]                 .toInstance(Clock())
+    // @formatter:on
   }
 
   @Provides
