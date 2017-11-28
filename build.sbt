@@ -48,6 +48,6 @@ libraryDependencies ++= Seq(
 
 //Webjars
 libraryDependencies ++= Seq(
-  "org.webjars"       %% "webjars-play"  % "2.6.1",
-  "org.webjars" % "bootstrap-sass" % "3.3.7"
+  "org.webjars" %% "webjars-play"   % "2.6.1",
+  "org.webjars" %  "bootstrap-sass" % "3.3.7"
 )

@@ -9,8 +9,15 @@ import models.daos.UserDAO
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.H2Profile
 
-class UserDAOImplSlick @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends UserDAO with UserTableDefSlick with HasDatabaseConfigProvider[H2Profile] {
+import scala.concurrent.ExecutionContext
+
+class UserDAOImplSlick @Inject()
+(
+  protected val dbConfigProvider: DatabaseConfigProvider
+)(
+  implicit
+  ec: ExecutionContext
+) extends UserDAO with UserTableDefSlick with HasDatabaseConfigProvider[H2Profile] {
 
   import profile.api._
 

@@ -1,6 +1,8 @@
+@import play.api.i18n.Messages
 @import org.webjars.play.WebJarsUtil
+@import controllers.AssetsFinder
 
-@(foo: String)(implicit loggedUser: Option[User], messages: Messages, webJarsUtil: WebJarsUtil)
+@(foo: String)(implicit messages: Messages, webJarsUtil: WebJarsUtil, assets: AssetsFinder)
 
 @main("Title") {
 

@@ -1,4 +1,5 @@
 @import forms.FormSignUp
+
 @()(implicit messages: Messages)
 
 @entry(key: String, link: String)(submenu: Html) = {
@@ -34,12 +35,12 @@
 
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="nav navbar-nav">
-                @entry("home", routes.Application.index.toString) {
+                @*@entry("home", controllers.routes.ControllerApplication.index.toString) {
                     @HtmlFormat.empty
                 }
-                @entry("categories", routes.Categories.overview.toString) {
+                @entry("categories", controllers.routes.ControllerCategories.overview.toString) {
                     @HtmlFormat.empty
-                }
+                }*@
             </ul>
 
             <p class="navbar-right navbar-text">
