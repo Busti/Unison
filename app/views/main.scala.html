@@ -1,13 +1,13 @@
 @import org.webjars.play.WebJarsUtil
 @import controllers.AssetsFinder
 
-@(title: String)(content: Html)(implicit messages: Messages, webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+@(page: String)(content: Html)(implicit messages: Messages, webJarsUtil: WebJarsUtil, assets: AssetsFinder)
 
 <!DOCTYPE html>
 
 <html>
     <head>
-        <title>@title</title>
+        <title>@Messages("title." + page)</title>
         <link rel="shortcut icon" type="image/png" href="@assets.path("img/favicon.png")">
 
         <link rel="stylesheet" href="@assets.path("stylesheets/main.css")">

@@ -16,7 +16,7 @@ class ControllerApplication @Inject()
   webJarsUtil: WebJarsUtil,
   assets: AssetsFinder
 ) extends InjectedController with I18nSupport {
-  def index = Action { implicit request =>
-    Ok(views.html.index())
+  def view = Action { implicit request =>
+    Ok(views.html.landing())
   }
 }
