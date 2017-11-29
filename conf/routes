@@ -5,6 +5,7 @@
 # Home page
 GET    /                            controllers.ControllerApplication.view
 GET    /categories                  controllers.ControllerCategories.overview
+GET    /auth/signup                 controllers.auth.ControllerSignUp.view
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file                controllers.Assets.at(path="/public", file)

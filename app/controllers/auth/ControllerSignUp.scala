@@ -33,6 +33,10 @@ class ControllerSignUp @Inject()
   ex: ExecutionContext
 ) extends AbstractController(components) with I18nSupport {
 
+  def view = Action { implicit request =>
+    Ok(views.html.auth.signup())
+  }
+
   /**
     * Handles the submitted form.
     *
