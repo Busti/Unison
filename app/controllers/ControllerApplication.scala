@@ -17,6 +17,6 @@ class ControllerApplication @Inject()
   assets: AssetsFinder
 ) extends InjectedController with I18nSupport {
   def index = Action { implicit request =>
-    Ok(views.html.index("foo"))
+    Ok(views.html.index())
   }
 }

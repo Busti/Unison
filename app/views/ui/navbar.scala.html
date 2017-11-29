@@ -1,17 +1,15 @@
-@import forms.FormSignUp
-
 @()(implicit messages: Messages)
 
-@entry(key: String, link: String)(submenu: Html) = {
-    <li @if(submenu.body.trim.nonEmpty) {
+@entry(key: String, link: String)(submenu: Option[Html] = None) = {
+    <li @if(submenu.nonEmpty) {
         class="dropdown"}>
-    @if(submenu.body.trim.nonEmpty) {
+    @if(submenu.nonEmpty) {
         <a class="dropdown-toggle" href="@link" role="button" data-toggle="dropdown" aria-haspopup="true">
             @Messages("navbar." + key)
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-        @submenu
+        @submenu.get
         </ul>
     } else {
         <a href="@link">@Messages("navbar." + key)</a>
@@ -35,12 +33,8 @@
 
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="nav navbar-nav">
-                @*@entry("home", controllers.routes.ControllerApplication.index.toString) {
-                    @HtmlFormat.empty
-                }
-                @entry("categories", controllers.routes.ControllerCategories.overview.toString) {
-                    @HtmlFormat.empty
-                }*@
+                @entry("home", controllers.routes.ControllerApplication.index.toString)()
+                @entry("categories", controllers.routes.ControllerCategories.overview.toString)()
             </ul>
 
             <p class="navbar-right navbar-text">
