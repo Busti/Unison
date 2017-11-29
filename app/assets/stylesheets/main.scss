@@ -3,3 +3,9 @@
 html {
   background-color: lightblue;
 }
+
+.navbar-brand {
+  background: linear-gradient(120deg, #3F51B5, #03A9F4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
