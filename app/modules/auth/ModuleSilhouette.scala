@@ -15,6 +15,8 @@ import com.mohiva.play.silhouette.impl.providers.state.{CsrfStateItemHandler, Cs
 import com.mohiva.play.silhouette.impl.services.GravatarService
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
+import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import models.daos.UserDAO
 import models.daos.slick.UserDAOImplSlick
 import models.services.{UserService, UserServiceImplSlick}
@@ -78,6 +80,12 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   def provideAuthenticatorCrypter(configuration: Configuration): Crypter = {
     val config = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
     new JcaCrypter(config)
+  }
+
+  @Provides
+  def provideAuthInfoRepository(
+    passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo]): AuthInfoRepository = {
+    new DelegableAuthInfoRepository(passwordInfoDAO)
   }
 
   @Provides
