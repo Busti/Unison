@@ -1,21 +1,23 @@
-package modules
+package modules.auth
 
 import javax.inject.Named
 
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
 import com.mohiva.play.silhouette.crypto._
 import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticatorService, CookieAuthenticatorSettings}
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import com.mohiva.play.silhouette.impl.providers.state.{CsrfStateItemHandler, CsrfStateSettings}
 import com.mohiva.play.silhouette.impl.services.GravatarService
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
-import com.mohiva.play.silhouette.password.BCryptPasswordHasher
+import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
 import models.daos.UserDAO
 import models.daos.slick.UserDAOImplSlick
-import models.services.UserService
-import models.services.UserServiceImplSlick
+import models.services.{UserService, UserServiceImplSlick}
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
@@ -29,10 +31,11 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   override def configure() {
     // @formatter:off
     bind[Silhouette[EnvDefault]].to[SilhouetteProvider[EnvDefault]]
+
     bind[UserService]           .to[UserServiceImplSlick]
     bind[UserDAO]               .to[UserDAOImplSlick]
+
     bind[IDGenerator]           .toInstance(new SecureRandomIDGenerator())
-    bind[PasswordHasher]        .toInstance(new BCryptPasswordHasher())
     bind[FingerprintGenerator]  .toInstance(new DefaultFingerprintGenerator(false))
     bind[EventBus]              .toInstance(EventBus())
     bind[Clock]                 .toInstance(Clock())
@@ -57,6 +60,13 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   }
 
   @Provides
+  @Named("crsf-state-item-signer")
+  def provideCSRFStateItemSigner(configuration: Configuration): Signer = {
+    val config = configuration.underlying.as[JcaSignerSettings]("silhouette.csrfStateItemHandler.signer")
+    new JcaSigner(config)
+  }
+
+  @Provides
   @Named("authenticator-signer")
   def providesAuthenticatorCookieSigner(configuration: Configuration): Signer = {
     val config = configuration.underlying.as[JcaSignerSettings]("silhouette.authenticator.cookie.signer")
@@ -67,7 +77,6 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   @Named("authenticator-crypter")
   def provideAuthenticatorCrypter(configuration: Configuration): Crypter = {
     val config = configuration.underlying.as[JcaCrypterSettings]("silhouette.authenticator.crypter")
-
     new JcaCrypter(config)
   }
 
@@ -83,10 +92,29 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   ): AuthenticatorService[EnvDefault#A] = {
     val config = configuration.underlying.as[CookieAuthenticatorSettings]("silhouette.authenticator")
     val encoder = new CrypterAuthenticatorEncoder(crypter)
-
     new CookieAuthenticatorService(config, None, signer, cookieHeaderEncoding, encoder, fingerprintGenerator, idGenerator, clock)
   }
 
   @Provides
   def provideAvatarService(httpLayer: HTTPLayer): AvatarService = new GravatarService(httpLayer)
+
+  @Provides
+  def provideCsrfStateItemHandler(
+    idGenerator: IDGenerator,
+    @Named("csrf-state-item-signer") signer: Signer,
+    configuration: Configuration): CsrfStateItemHandler = {
+    val settings = configuration.underlying.as[CsrfStateSettings]("silhouette.csrfStateItemHandler")
+    new CsrfStateItemHandler(settings, idGenerator, signer)
+  }
+
+  @Provides
+  def providePasswordHasherRegistry(): PasswordHasherRegistry = {
+    PasswordHasherRegistry(new BCryptSha256PasswordHasher(), Seq(new BCryptPasswordHasher()))
+  }
+
+  @Provides
+  def provideCredentialsProvider(
+    authInfoRepository: AuthInfoRepository, passwordHasherRegistry: PasswordHasherRegistry): CredentialsProvider = {
+    new CredentialsProvider(authInfoRepository, passwordHasherRegistry)
+  }
 }

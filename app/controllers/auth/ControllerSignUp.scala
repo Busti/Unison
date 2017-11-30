@@ -1,21 +1,19 @@
 package controllers.auth
 
-import java.util.UUID
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
-import com.mohiva.play.silhouette.impl.providers._
 import controllers.AssetsFinder
 import models.services.{AuthTokenService, UserService}
-import org.webjars.play.{WebJarsUtil, routes}
-import play.api.i18n.{I18nSupport, Messages}
+import org.webjars.play.WebJarsUtil
+import play.api.i18n.I18nSupport
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import utils.silhouette.EnvDefault
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ControllerSignUp @Inject()
 (
@@ -37,11 +35,6 @@ class ControllerSignUp @Inject()
     Ok(views.html.auth.signup())
   }
 
-  /**
-    * Handles the submitted form.
-    *
-    * @return The result to display.
-    */
   def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
     ???
   }
