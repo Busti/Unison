@@ -2,12 +2,14 @@ package models.daos.slick
 
 import java.util.UUID
 
+import com.mohiva.play.silhouette.api.LoginInfo
 import slick.jdbc.H2Profile
 import slick.lifted.ProvenShape.proveShapeOf
 
 trait UserTableDefSlick {
   //Todo: 26.07.2017 Use Postgres in production.
   //Todo: 26.07.2017 Make the driver easily interchangeable?
+  //Todo: 02.12.2017 Rename User to Account.
   protected val profile: H2Profile
   import profile.api._
 
@@ -55,4 +57,12 @@ trait UserTableDefSlick {
   val passwords      = TableQuery[Passwords]
   val loginInfos     = TableQuery[LoginInfos]
   val userLoginInfos = TableQuery[UserLoginInfos]
+
+  def loginInfoQuery(loginInfo: LoginInfo) = {
+    loginInfos.filter(dbLoginInfo =>
+      dbLoginInfo.providerID === loginInfo.providerID
+      &&
+      dbLoginInfo.providerKey === loginInfo.providerKey
+    )
+  }
 }
