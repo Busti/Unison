@@ -36,6 +36,7 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
 
     bind[UserService]           .to[UserServiceImplSlick]
     bind[UserDAO]               .to[UserDAOImplSlick]
+    //bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoD]
 
     bind[IDGenerator]           .toInstance(new SecureRandomIDGenerator())
     bind[FingerprintGenerator]  .toInstance(new DefaultFingerprintGenerator(false))
@@ -62,7 +63,7 @@ class ModuleSilhouette extends AbstractModule with ScalaModule {
   }
 
   @Provides
-  @Named("crsf-state-item-signer")
+  @Named("csrf-state-item-signer")
   def provideCSRFStateItemSigner(configuration: Configuration): Signer = {
     val config = configuration.underlying.as[JcaSignerSettings]("silhouette.csrfStateItemHandler.signer")
     new JcaSigner(config)
