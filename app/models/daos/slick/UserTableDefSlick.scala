@@ -24,14 +24,14 @@ trait UserTableDefSlick {
     def *         = (uuid, username, email, avatarURL, activated) <> (DBUser.tupled, DBUser.unapply)
   }
 
-  case class DBPassword(uuid:UUID, hasher: String, hash: String, salt: Option[String])
+  case class DBPasswordInfo(hasher: String, hash: String, salt: Option[String], loginInfoId: Long)
 
-  class Passwords(tag: Tag) extends Table[DBPassword](tag, "Passwords") {
-    def uuid   = column[UUID]("uuid", O.PrimaryKey)
-    def hasher = column[String]("hasher")
-    def hash   = column[String]("hash")
-    def salt   = column[Option[String]]("salt")
-    def *      = (uuid, hasher, hash, salt) <> (DBPassword.tupled, DBPassword.unapply)
+  class PasswordInfos(tag: Tag) extends Table[DBPasswordInfo](tag, "Passwords") {
+    def hasher      = column[String]("hasher")
+    def hash        = column[String]("hash")
+    def salt        = column[Option[String]]("salt")
+    def loginInfoId = column[Long]("loginInfoId")
+    def *           = (hasher, hash, salt, loginInfoId) <> (DBPasswordInfo.tupled, DBPasswordInfo.unapply)
   }
 
   case class DBLoginInfo(id: Option[Long], providerID: String, providerKey: String)
@@ -48,13 +48,13 @@ trait UserTableDefSlick {
 
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, "User_LoginInfo") {
     def userId      = column[UUID]("uuid_user")
-    def loginInfoId = column[Long]("id_LoginInfo")
+    def loginInfoId = column[Long]("id_loginInfo")
     def *           = (userId, loginInfoId) <> (DBUserLoginInfo.tupled, DBUserLoginInfo.unapply)
   }
 
   //Access Objects for the Tables
   val users          = TableQuery[Users]
-  val passwords      = TableQuery[Passwords]
+  val passwords      = TableQuery[PasswordInfos]
   val loginInfos     = TableQuery[LoginInfos]
   val userLoginInfos = TableQuery[UserLoginInfos]
 
