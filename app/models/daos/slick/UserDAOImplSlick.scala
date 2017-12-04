@@ -21,9 +21,6 @@ class UserDAOImplSlick @Inject()
 
   import profile.api._
 
-  def loginInfoQuery(loginInfo: LoginInfo) =
-    loginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)
-
   def find(loginInfo: LoginInfo) = {
     /* Comprehension that creates a query doing the following
      */
@@ -65,12 +62,7 @@ class UserDAOImplSlick @Inject()
     val dBLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
 
     val loginInfoAction = {
-      val retrieveLoginInfo = loginInfos.filter(
-        info =>
-          info.providerID === user.loginInfo.providerID
-            &&
-            info.providerKey === user.loginInfo.providerKey
-      ).result.headOption
+      val retrieveLoginInfo = loginInfoQuery(user.loginInfo).result.headOption
 
       val insertLoginInfo = loginInfos.returning(loginInfos.map(_.id)).into(
         (info, id) =>

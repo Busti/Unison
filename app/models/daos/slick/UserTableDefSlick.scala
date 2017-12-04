@@ -54,7 +54,7 @@ trait UserTableDefSlick {
 
   //Access Objects for the Tables
   val users          = TableQuery[Users]
-  val passwords      = TableQuery[PasswordInfos]
+  val passwordInfos      = TableQuery[PasswordInfos]
   val loginInfos     = TableQuery[LoginInfos]
   val userLoginInfos = TableQuery[UserLoginInfos]
 

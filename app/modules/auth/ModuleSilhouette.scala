@@ -1,6 +1,6 @@
 package modules.auth
 
-import javax.inject.Named
+import javax.inject.{Inject, Named}
 
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
@@ -24,12 +24,17 @@ import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
-import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.ws.WSClient
 import play.api.mvc.CookieHeaderEncoding
 import utils.silhouette.EnvDefault
 
-class ModuleSilhouette extends AbstractModule with ScalaModule {
+import scala.concurrent.ExecutionContext
+
+class ModuleSilhouette @Inject
+(
+  implicit
+  ec: ExecutionContext
+) extends AbstractModule with ScalaModule {
   override def configure() {
     // @formatter:off
     bind[Silhouette[EnvDefault]].to[SilhouetteProvider[EnvDefault]]
