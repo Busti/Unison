@@ -1,4 +1,4 @@
-package modules.auth
+package modules
 
 import javax.inject.{Inject, Named}
 
@@ -17,9 +17,9 @@ import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, Secure
 import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
-import models.daos.UserDAO
-import models.daos.slick.UserDAOImplSlick
-import models.services.{UserService, UserServiceImplSlick}
+import models.daos.{AuthTokenDAO, UserDAO}
+import models.daos.slick.{AuthTokenDAOImplSlick, PasswordInfoDAOImplSlick, UserDAOImplSlick}
+import models.services.{AuthTokenService, AuthTokenServiceImpl, UserService, UserServiceImpl}
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
@@ -28,25 +28,25 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.CookieHeaderEncoding
 import utils.silhouette.EnvDefault
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class ModuleSilhouette @Inject
-(
-  implicit
-  ec: ExecutionContext
-) extends AbstractModule with ScalaModule {
+class ModuleSilhouette extends AbstractModule with ScalaModule {
   override def configure() {
     // @formatter:off
     bind[Silhouette[EnvDefault]].to[SilhouetteProvider[EnvDefault]]
 
-    bind[UserService]           .to[UserServiceImplSlick]
-    bind[UserDAO]               .to[UserDAOImplSlick]
-    //bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoD]
+    bind[UserService]                       .to[UserServiceImpl]
+    bind[UserDAO]                           .to[UserDAOImplSlick]
 
-    bind[IDGenerator]           .toInstance(new SecureRandomIDGenerator())
-    bind[FingerprintGenerator]  .toInstance(new DefaultFingerprintGenerator(false))
-    bind[EventBus]              .toInstance(EventBus())
-    bind[Clock]                 .toInstance(Clock())
+    bind[AuthTokenDAO]                      .to[AuthTokenDAOImplSlick]
+    bind[AuthTokenService]                  .to[AuthTokenServiceImpl]
+
+    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImplSlick]
+
+    bind[IDGenerator]                       .toInstance(new SecureRandomIDGenerator())
+    bind[FingerprintGenerator]              .toInstance(new DefaultFingerprintGenerator(false))
+    bind[EventBus]                          .toInstance(EventBus())
+    bind[Clock]                             .toInstance(Clock())
     // @formatter:on
   }
 
